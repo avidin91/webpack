@@ -1,0 +1,89 @@
+JS / React,Раздел,Название,Описание и комментарий,Методы,Ссылка на литературу 
+JS,Работа с классами,elem.className,заменяет сразу все классы = class,,https://learn.javascript.ru/styles-and-classes
+JS,,elem.classList ,работает сразу со всеми классами,"elem.classList.add/remove(""class"") – добавить/удалить класс.",
+,,,,"elem.classList.toggle(""class"") – добавить класс, если его нет, иначе удалить.",
+,,,,"elem.classList.contains(""class"") – проверка наличия класса, возвращает true/false",
+JS,Работа с файлами,"input type=""file""","В теге прописываем событие onchange=""openFile(this)""",.files - псевдомассив с файлами,https://learn.javascript.ru/file
+,,,,.name - имя,
+,,,,.lastModified - timestamp для даты последнего изменения файла,
+JS,Класс New FileReader(),New FileReader(),let reader = New FileReader() В скобках надо указать переменную. Переменная - это объект функции. Объект функции передаёт input через this.,reader.readAsText() - прочитать содержимое текстового файла,
+,,,,"reader.result - результат. Пример: reader.onload = function() {
+console.log(reader.result)
+}",
+,,,,"reader.error - сообщение об ошибке. Пример: reader.onerror = function() {
+console.log(reader.error)
+}",
+JS,Анимация CSS,transition-property:,"Список свойств, которые необходимо анимировать",transition-property: all; - анимировать всё,https://learn.javascript.ru/css-transitions
+,,transition-duration:,"Сколько времени займёт анимация. Время должно быть указано в формате CSS, т.е. в секундах и в милисекундах.",,
+,,transition-delay:,"Задержка перед началом анимации. Т.е. если мы установим 1 секунду, то анимация начнётся через 1 секунду после изменения свойства. При отрицательных свойства анимация начнётся например с середины, допустим если duration 2 секунды, а delay -1 секунду.",,
+,,transition-timing-function:,"Временнáя функция, которая задаёт, как процесс анимации будет распределён во времени, например начнётся ли анимация медленно, чтобы потом ускориться или наоборот. Пример записи: transition: left 5s cubic-bezier(0, 0, 1, 1); или transition: left 5s linear; Для transitoi всего 4 параметра: свойство, время, функция, задержка перед началом анимации (после Безье).","Кривая Безье. Linear - cubic-bezier(0, 0, 1, 1)",
+,,,,"Кривая Безье. Easy - cubic-bezier(0.25, 0.1, 0.25, 1.0)",
+,,,,"Кривая Безье. Easy-in - cubic-bezier(0.42, 0, 1.0, 1.0)",
+,,,,"Кривая Безье. Easy-out - cubic-bezier(0, 0, 0.58, 1.0)",
+,,,,"Кривая Безье. Easy-in-out - cubic-bezier(0.42, 0, 0.58, 1.0)",
+JS,События,transitionend,"Срабатывает, когда заказчивается анимация. Пример записи elem.addEventListener('transitionend', )","Проверить, какая конкретная анимация завершена, если их несколько. Например анимация opacity. elem.addEventListener('transitionend', function(e) { 
+if(!e.propertyName == 'opacity') return
+})",
+React,Встроенные функции,Context,Позволяет получить доступ к Store без использования props. По сути выступает как глобальный объект,,
+React,React-Redux,Connect,Реализация Context библиотекой React-Redux,,
+React,React-Redux,CreateSlice,"Позволяет поздать Store для слайса. 
+import {createSlice} from ""@reduxjs/toolkit"";
+
+const profileSlice =  createSlice({
+name: 'Имя Стора',
+initialState: {},
+reducers: {
+  addpost() {}
+ }
+})
+export const {addPost} = profileSlice.actions;
+export default profileSlice.reducer;
+",,
+React,React-Redux,GenerateStore,"Создаёт глобальный Store из сторов Слайсов.
+
+import {configureStore} from ""@reduxjs/toolkit"";
+import profileReducer from ""./profileSlice"";
+export default configureStore({
+    reducer: {
+        profilePageState: profileReducer,
+    },
+})",,
+React,React-Redux,useSelector,"Позволяет получить доступ к Store в компоненте.
+
+import {useSelector} from ""react-redux"";
+
+const userPageState = useSelector(store => store.usersPageState)",,
+React,React-Redux,useDispatch,"Позволяет получить доступ к методам.
+
+import {useDispatch} from ""react-redux"";
+import {addPost} from '././/store/profileSlice';
+
+const dispatch = useDispatch();
+
+В dispatch передаём вызванный метод. dispatch(addPost())",,
+React,React-router-dom,useParams,"Хук. Позволяет считать параметры пути. Например у нас есть маршурт:
+<Routes>
+                    <Route path='/profile/:id' element={<ProfileFunc />}/>
+ </Routes>
+
+С помощью этого хука мы сможем считать ID. Возвращает параметры {id:'1234'} для site.ru/profile/1234. 
+При этом количество параметров может быть неограниченно, например '/profile/:id/:title
+/profile/:id?' - знак вопроса говорит о том, что данный параментр является необязательным",,
+React,Redux-toolkit,createAsynsThunk,"В слайсе над параметрами создаём и сразу экспартируем переменную, равную createAsyncThunk('name', async function() {}).
+
+Асинхронная функция первым параметром принимает входящие данные из компоненты. Вторым много всего, например ошибку rejectWithValue (надо вернуть, чтобы передать в экстраредьюсер), так же второым параметром можно передать например диспатч.
+
+Ниже в параметрах слайса создаем extraRareducers:
+extraReducers: {
+        [fetchTodos.pending]: (state, action) => {
+            state.status = 'loading';
+        },
+        [fetchTodos.fulfilled]: (state, action) => {
+            state.status = 'resolved';
+            state.todos = action.payload;
+        },
+        [fetchTodos.rejected]: (state, action) => {
+            state.status = 'rejected';
+            state.error = action.payload;
+        },
+    }",,https://www.youtube.com/watch?v=6RTbC8Acj1M&ab_channel=%D0%9C%D0%B8%D1%85%D0%B0%D0%B8%D0%BB%D0%9D%D0%B5%D0%BF%D0%BE%D0%BC%D0%BD%D1%8F%D1%89%D0%B8%D0%B9
